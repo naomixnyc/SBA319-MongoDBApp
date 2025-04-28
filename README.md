@@ -52,8 +52,9 @@ To populate the database with sample data, you can run the seed.js script. The d
     "title": "Article Title",
     "description": "Article Description",
     "markdown": "Full article content",
-    "authorId": "Author's ObjectId" ```
+    "authorId": "Author's ObjectId"
   }
+  ```
 
   - **POST** `/articles/:id/comments`  
   Add a comment to an article.  
@@ -61,7 +62,8 @@ To populate the database with sample data, you can run the seed.js script. The d
   ```json
   {
     "content": "Comment content"
-  } ```
+  }
+  ```
 
   - **PUT** `/articles/:id`  
   Update an article by its id.  
@@ -71,7 +73,8 @@ To populate the database with sample data, you can run the seed.js script. The d
     "title": "Updated Title",
     "description": "Updated Description",
     "markdown": "Updated content"
-  } ```
+  }
+  ```
 
   - **DELETE** `/articles/:id`  
   Delete an article by its id.  
