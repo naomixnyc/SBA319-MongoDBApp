@@ -10,12 +10,6 @@ This is a simple article board application using Express.js, MongoDB, Mongoose a
 - [Technologies](#technologies)
 - [Installation](#installation)
 - [API Endpoints](#api-endpoints)
-  - [GET Articles](#get-articles)
-  - [GET Article by Slug](#get-article-by-slug)
-  - [POST New Article](#post-new-article)
-  - [POST New Comment](#post-new-comment)
-  - [PUT Update Article](#put-update-article)
-  - [DELETE Article](#delete-article)
 
 
   ## Features
@@ -58,7 +52,7 @@ To populate the database with sample data, you can run the seed.js script. The d
     "title": "Article Title",
     "description": "Article Description",
     "markdown": "Full article content",
-    "authorId": "Author's ObjectId"
+    "authorId": "Author's ObjectId" ```
   }
 
   - **POST** `/articles/:id/comments`  
@@ -67,7 +61,7 @@ To populate the database with sample data, you can run the seed.js script. The d
   ```json
   {
     "content": "Comment content"
-  }
+  } ```
 
   - **PUT** `/articles/:id`  
   Update an article by its id.  
@@ -77,7 +71,7 @@ To populate the database with sample data, you can run the seed.js script. The d
     "title": "Updated Title",
     "description": "Updated Description",
     "markdown": "Updated content"
-  }
+  } ```
 
   - **DELETE** `/articles/:id`  
   Delete an article by its id.  
