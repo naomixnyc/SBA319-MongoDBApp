@@ -6,6 +6,8 @@ require('dotenv').config() // CommonJS way to load environment variables
 const port = process.env.PORT || 4000
 
 
+require('./models/commentModel.js')
+require('./models/authorModel.js')
 const Article = require('./models/articleModel.js') 
 const articleRouter = require('./routes/articleRoutes.js') 
 
