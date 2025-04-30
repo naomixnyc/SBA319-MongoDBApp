@@ -18,7 +18,7 @@ mongoose.connect(process.env.ATLAS_URI)
 
 
 app.set('view engine', 'ejs')
-
+app.use(express.json())
 
 app.use(express.urlencoded({ extended: false })) 
 app.use(methodOverride('_method')) // allows method override for PUT, DELETE from HTML

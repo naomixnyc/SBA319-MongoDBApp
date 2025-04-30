@@ -14,7 +14,7 @@
 
 <body>
     <div class='container'>
-        <h1 class="mb-4">Blog Articles</h1>
+        <h1 class="mb-4">Articles</h1>
         <a href="/articles/new" class="btn btn-success">New Article</a>
         <% articles.forEach(article => { %>
 
@@ -25,7 +25,7 @@
                         <%= article.createdAt.toLocaleDateString() %> by <%= article.author.name %>
                     </div>
                     <div class="card-text mb-2"><%= article.description %></div>
-                    <a href="articles/<%= article.slug %>" class="btn btn-primary">Read More</a> 
+                    <a href="articles/<%= article.id %>" class="btn btn-primary">Read More</a> 
                     
                     <form action="/articles/<%= article.id %>?_method=DELETE" method="POST" class="d-inline">
                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -35,7 +35,8 @@
                     <% article.comments.forEach(comment => { %>
                         <div class="card mt-2">
                             <div class="card-body">
-                                <p><strong><%= comment.author %>:</strong> <%= comment.content %></p>
+
+                                <p><strong><%= comment.author?.name || 'Anonymous' %>:</strong> <%= comment.content %></p> 
                             </div>
                         </div>
                     <% }) %>
