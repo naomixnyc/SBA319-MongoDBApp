@@ -68,6 +68,7 @@ This is a simple article bulletin board application using Express.js, MongoDB, M
 
 - **POST** `/articles`  
   Creates a new article. The author must already be registered and referenced by their _id.
+
   **Request Body:**
   ```json
   {
@@ -105,6 +106,7 @@ This is a simple article bulletin board application using Express.js, MongoDB, M
 
 - **PUT** `/articles/:id`  
   Update an existing article by its _id.
+  
   **Request Body:**
   ```json
   {
