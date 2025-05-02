@@ -34,6 +34,7 @@ This is a simple article bulletin board application using Express.js, MongoDB, M
 - **Environment Variables**: dotenv
 
   ## Installation
+
 1. Clone the repository
 2. Install dependencies (npm install)
 3. Set up your .env file with your MongoDB connection URI and run the `seed.js` script to create three collections: 13 Articles, 13 Authors, 13 Comments.
@@ -41,23 +42,24 @@ This is a simple article bulletin board application using Express.js, MongoDB, M
    node seed.js
 ```
 
-
   ## API Endpoints
-
 
 - **GET** `/articles`  
   Display all articles, sorted by most recent ({ createdAt: -1 }).
   Each article includes its author and associated comments. 
 
-  - **GET** `/articles/authors`  
+- **GET** `/` 
+  Displays article previews via a form. The "Read More" button is functional.
+
+- **GET** `/articles/authors`  
   Display all authors currently registered.   
 
 - **GET** `/articles/comments`  
   Display all comments submitted.  
 
 
-- ---**GET** `/articles/:slug`---  
-  ---View a single article by its slug, including its author and comments.--- 
+- ~~**GET** `/articles/:slug`~~  
+  ~~View a single article by its slug, including its author and comments.~~ 
 
 - **GET** `/articles/:id`  
   View a single article by its MongoDB _id (ObjectId), including its author and comments. 
@@ -65,7 +67,7 @@ This is a simple article bulletin board application using Express.js, MongoDB, M
 
 
 - **POST** `/articles`  
-  Create a new article.  
+  Creates a new article. The author must already be registered and referenced by their _id.
   **Request Body:**
   ```json
   {
@@ -82,26 +84,27 @@ This is a simple article bulletin board application using Express.js, MongoDB, M
 
 - **POST** `/articles/authors`
   Add a new author.
-```json
-{
-  "name": "Author Name",
-  "email": "Author's email"
-}
-```
+  ```json
+  {
+    "name": "Author Name",
+    "email": "Author's email"
+  }
+  ```
 
 - **POST** `/articles/:id/comments`  
-  Add a comment to a specific article.  
+  Adds a comment to the specified article. The author field (referenced by their _id) is optional.
+
   **Request Body:**
   ```json
   {
     "content": "Comment content",
-    "author": Author's ObjectId //"6811045c50b8186c1d7e5a6e"  
+    "author": "Author's ObjectId" //6811045c50b8186c1d7e5a6e 
   }
   ```
 
 
 - **PUT** `/articles/:id`  
-  Update an existing article by its _id. 
+  Update an existing article by its _id.
   **Request Body:**
   ```json
   {
@@ -112,6 +115,6 @@ This is a simple article bulletin board application using Express.js, MongoDB, M
   ```
 
 - **DELETE** `/articles/:id`  
-  Delete an article by its _id.  
+  Deletes an article by its _id. This action should be restricted to admins only. 
 
-### **Notes:** `slug` is automatically generated from the title when an article is created. 
+#### **Notes:** `slug` is automatically generated from the title when an article is created. 

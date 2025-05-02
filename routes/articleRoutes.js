@@ -1,11 +1,13 @@
+
 const express = require('express')
 const router = express.Router()
 const Article = require('../models/articleModel.js')
 const Author = require('../models/authorModel.js')
 const Comment = require('../models/commentModel.js')
+const mongoose = require('mongoose')
 
 // = = = = = = = = = = = = =
-//  GET ALL ARTICLES (JSON)
+//  GET ALL ARTICLES
 // = = = = = = = = = = = = =
 router.get('/', async (req, res) => {
   try {
@@ -125,13 +127,17 @@ router.get('/:id', async (req, res) => {
   try {
     const article = await Article.findById(req.params.id)
       .populate('author')
-      .populate('comments')
+      .populate({
+        path: 'comments',
+        populate: { path: 'author' } // populate author in each comment
+      })
     if (!article) return res.status(404).send('Article not found')
     //res.render('articles/show', { article: article })
     res.json(article) 
   } catch (err) {
     console.error('GET /articles/:id failed:', err)
-    res.redirect('/')
+    res.status(500).send('Server error')
+    //res.redirect('/')
   }
 })
 
@@ -162,38 +168,60 @@ router.post('/:id/comments', async (req, res) => {
 
     const comment = new Comment({
       content: req.body.content,
-      article: article._id
+      article: article._id,
+      author: req.body.author // optional — only if provided
     })
 
     const savedComment = await comment.save()
     article.comments.push(savedComment._id)
     await article.save()
 
-    res.status(201).json(savedComment)
+    const updatedArticle = await Article.findById(article._id).populate('comments')
+    const populatedComment = await Comment.findById(savedComment._id).populate('author')
+
+    res.status(201).json({
+      message: 'Comment added successfully',
+      comment: populatedComment,
+      article: updatedArticle
+    })
   } catch (err) {
     console.error('POST /articles/:id/comments failed:', err)
     res.status(500).json({ message: 'Failed to add comment' })
   }
 })
 
+
 // = = = = = = = = = = = = =
 //  PUT Edit/Update ARTICLE
 // = = = = = = = = = = = = =
+
 router.put('/:id', async (req, res) => {
+  const { title, description, content } = req.body
   try {
-    const article = await Article.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    })
+    // const id = new mongoose.Types.ObjectId({req.params.id})
+    // const article = await Article.findByIdAndUpdate(req.params.id, req.body, {
+    //   new: true,
+    //   runValidators: true,
+    // })
+    const article = await Article.findOneAndUpdate(
+      { _id: new mongoose.Types.ObjectId(req.params.id) },
+      { title, description, content },
+      { new: true }
+    )
     if (!article) {
+      return res.status(404).send('Article not found')
       return res.redirect('/') // redirect if article is not found
     }
-    res.redirect(`/articles/${article.slug}`)
+    res.json(article)
+    //res.redirect(`/articles/${article.slug}`)
   } catch (err) {
-    console.log(err)
+    console.log(err) //res.status(500).send(err.message)
     res.redirect('/') // redirect on error
   }
 })
+
+
+
 
 // = = = = = = = = = = = = =
 //  DELETE DELETE AN ARTICLE
@@ -206,11 +234,12 @@ router.delete('/:id', async (req, res) => {
     if (!article) {
       return res.redirect('/') // redirect if article is not found
     }
-    res.redirect('/')
+    res.status(200).json({ message: 'Article deleted successfully' })
   } catch (err) {
     console.log(err)
     res.redirect('/') // redirect on error
   }
 })
+
 
 module.exports = router
